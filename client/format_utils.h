@@ -13,8 +13,6 @@ public:
 
 std::string fill_zeroes(const std::string input);
 
-//char* fill_zeroes(const std::string& input);
-
 bool parse_id_to_bytes(const std::string& in, unsigned char* out);
 
 unsigned char char_to_byte(char ch);

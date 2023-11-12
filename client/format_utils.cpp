@@ -15,15 +15,6 @@ std::string fill_zeroes(const std::string input) {
 	return output;
 }
 
-/*char* fill_zeroes(const std::string& input) {
-	char* output = new char[MAX_STRING_SIZE];
-
-	std::memset(output, '\0', MAX_STRING_SIZE);
-	std::strncpy(output, input.c_str(), std::min(MAX_STRING_SIZE, static_cast<unsigned short>(input.size())));
-
-	return output;
-}*/
-
 bool parse_id_to_bytes(const std::string& in, unsigned char* out) {
 	if (in.size() != CLIENT_ID_SIZE * 2) {
 		cout << "Error: wrong id size" << endl;
