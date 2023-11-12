@@ -141,7 +141,7 @@ void Client::write_id_file() {
         std::string uuid;
         parse_bytes_to_id(this->client_id, CLIENT_ID_SIZE, &uuid);
         file << uuid << endl;
-        file << Base64Wrapper::encode(this->private_key);//TODO replace this.privkey to rsa
+        file << Base64Wrapper::encode(this->private_key);
     }
     catch (const std::exception&) {
         cout << "Error writing " << ID_FILE << endl;
@@ -160,7 +160,7 @@ void Client::write_header(const uint16_t code, const uint32_t payload_size, unsi
 }
 
 ResponseHeader* Client::read_header() {
-    ResponseHeader* header = new ResponseHeader();//TODO remove header pointer in parent function?
+    ResponseHeader* header = new ResponseHeader();
     try {
         unsigned char* data = new unsigned char[RESPONSE_HEADER_SIZE];
         size_t len = boost::asio::read(this->socket, boost::asio::buffer(data, RESPONSE_HEADER_SIZE), boost::asio::transfer_exactly(RESPONSE_HEADER_SIZE));
@@ -224,14 +224,10 @@ bool Client::exchange_keys(const unsigned short opcode) {
         cout << "Sent " << len << " bytes, connect/reconnect request" << endl;
 
         ResponseHeader* header = read_header();
-        cout << header->code << " request opcode" << endl; //TODO remove
-        cout << int(header->version) << " version" << endl; //TODO remove
 
         if (header->code == OP_RESPONSE_REGISTRATION_SUCCESS) {
-            cout << "Registration succeeded" << endl; //TODO remove
             unsigned char* payload_id = new unsigned char[header->payload_size];
             receive_payload(payload_id, header->payload_size);
-            cout << "Id received" << endl; //TODO remove
             for (size_t i = 0; i < header->payload_size; ++i) {
                 this->client_id[i] = payload_id[i];
             }
@@ -255,7 +251,7 @@ bool Client::exchange_keys(const unsigned short opcode) {
                 unsigned char* payload = new unsigned char[header->payload_size];
                 unsigned char* aes_encrypted = new unsigned char[header->payload_size - CLIENT_ID_SIZE];
                 receive_payload(payload, header->payload_size);
-                std::memcpy(this->client_id, payload, CLIENT_ID_SIZE);  //TODO move this to row 193...
+                std::memcpy(this->client_id, payload, CLIENT_ID_SIZE);
                 std::memcpy(aes_encrypted, payload + CLIENT_ID_SIZE, header->payload_size - CLIENT_ID_SIZE);
                 //now we need to decrypt aes, save it in this->aes
                 
@@ -301,7 +297,7 @@ void Client::receive_payload(unsigned char* payload, unsigned int payload_size) 
 
 //  for 1029, 1030 and 1031 messages
 void Client::send_crc_message(std::string filename, unsigned short opcode) {
-    cout << "Sending crc message" << endl; //TODO REMOVE, DEBUG
+    cout << "Sending crc message" << endl;
     const size_t message_size = REQUEST_HEADER_SIZE + MAX_STRING_SIZE;
     unsigned char* message = new unsigned char[message_size];
     write_header(opcode, MAX_STRING_SIZE, message);
